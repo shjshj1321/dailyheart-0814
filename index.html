@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8월 마음건강 출석부</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      background-color: #FAFAFA;
+      color: #262626;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Instagram style custom smooth shadow */
+    .insta-card {
+      background: #FFFFFF;
+      border: 1px solid #EFEFEF;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+      border-radius: 24px;
+    }
+
+    .insta-button {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .insta-button:disabled {
+      background: #E5E7EB !important;
+      color: #9CA3AF !important;
+      cursor: not-allowed;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .insta-button:not(:disabled):active {
+      transform: scale(0.98);
+    }
+
+    /* Temperature Range Slider custom styling */
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 28px;
+      width: 28px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      cursor: pointer;
+      border: 3px solid currentColor;
+      margin-top: -10px;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      cursor: pointer;
+      border-radius: 9999px;
+    }
+
+    /* Pulse animation for active highlights */
+    @keyframes subtlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .pulse-effect {
+      animation: subtlePulse 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 sm:p-6 md:p-8">
+
+  <div class="w-full max-w-md mx-auto relative pb-12">
+    
+    <!-- Top Header Bar -->
+    <header class="flex items-center justify-between mb-6 px-2">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-rose-500 to-purple-600 p-[2px] flex items-center justify-center">
+          <div class="w-full h-full bg-white rounded-full flex items-center justify-center">
+            <span class="text-sm">🌿</span>
+          </div>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-tight text-gray-900 leading-none">8월 마음건강 출석부</h1>
+          <p class="text-[11px] text-gray-400 mt-0.5 font-normal" id="today-date-display">2026년 8월 마음 체크인</p>
+        </div>
+      </div>
+
+      <!-- Settings / GAS URL Drawer Trigger Button -->
+      <button id="gas-settings-btn" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors" title="서버 연결 설정">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+    </header>
+
+    <!-- STEP 1: PASSWORD AUTHENTICATION -->
+    <section id="step-auth" class="insta-card p-6 transition-all duration-300">
+      <div class="text-center my-4">
+        <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-2xl">
+          🔒
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">오늘의 마음 암호</h2>
+        <p class="text-xs text-gray-500 mt-1">오늘 선생님께서 알려주신 비밀번호를 입력해주세요.</p>
+      </div>
+
+      <form id="auth-form" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1.5">출석 암호</label>
+          <input 
+            type="password" 
+            id="input-password"
+            placeholder="암호를 입력하세요..."
+            required
+            class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all text-center tracking-wider font-semibold placeholder:text-gray-400 placeholder:font-normal"
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          id="auth-submit-btn"
+          class="w-full py-3.5 px-4 text-white font-semibold rounded-xl text-sm shadow-md transition-all flex items-center justify-center space-x-2 bg-gradient-to-r from-rose-500 to-pink-500 hover:opacity-95"
+        >
+          <span id="auth-btn-text">암호 확인하고 입장하기</span>
+          <span id="auth-btn-spinner" class="hidden">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <!-- Error Toast message -->
+      <div id="auth-error-msg" class="hidden mt-4 p-3 bg-red-50 border border-red-100 rounded-xl text-xs text-red-600 text-center font-medium">
+        ⚠️ 암호가 일치하지 않습니다. 다시 확인해 주세요!
+      </div>
+    </section>
+
+    <!-- STEP 2: ATTENDANCE CHECK-IN FORM -->
+    <section id="step-form" class="hidden space-y-5">
+      
+      <!-- Student Info Card -->
+      <div class="insta-card p-5 space-y-4">
+        <div class="flex items-center space-x-2 border-b border-gray-100 pb-3">
+          <span class="text-base">👤</span>
+          <h3 class="font-bold text-sm text-gray-800">학생 정보</h3>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-500 mb-1">학번</label>
+            <select id="student-id" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all">
+              <option value="">학번 선택</option>
+              <!-- Populated by JavaScript 21001 ~ 21033 -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-500 mb-1">이름</label>
+            <input type="text" id="student-name" placeholder="이름 입력" class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all">
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperature Gauge Card -->
+      <div class="insta-card p-5 space-y-3">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">🌡️</span>
+            <h3 class="font-bold text-sm text-gray-800">마음의 온도</h3>
+          </div>
+          <div id="temp-badge" class="px-2.5 py-1 rounded-full text-xs font-bold text-white transition-colors duration-300" style="background-color: #F59E0B;">
+            <span id="temp-value-display">50</span>°C
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <input type="range" id="temp-slider" min="1" max="100" value="50" class="w-full accent-rose-500">
+          <div class="flex justify-between text-[10px] text-gray-400 font-medium mt-1">
+            <span>1°C (차가움)</span>
+            <span>50°C (따뜻함)</span>
+            <span>100°C (뜨거움)</span>
+          </div>
+        </div>
+
+        <p id="temp-description" class="text-center text-xs text-gray-600 font-medium pt-1">
+          온화하고 편안한 마음 상태입니다.
+        </p>
+      </div>
+
+      <!-- Physical Symptoms Card -->
+      <div class="insta-card p-5 space-y-3">
+        <div class="flex items-center space-x-2 border-b border-gray-100 pb-3">
+          <span class="text-base">🩺</span>
+          <h3 class="font-bold text-sm text-gray-800">오늘의 신체 신호 <span class="text-rose-500">*</span></h3>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2" id="physical-options">
+          <!-- Options rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Emotion Words Card -->
+      <div class="insta-card p-5 space-y-3">
+        <div class="flex items-center space-x-2 border-b border-gray-100 pb-3">
+          <span class="text-base">🎨</span>
+          <h3 class="font-bold text-sm text-gray-800">오늘 느껴지는 대표 감정 <span class="text-rose-500">*</span></h3>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2" id="emotion-options">
+          <!-- Options rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Self-Soothing Phrase Card (Strict 5-character validation) -->
+      <div class="insta-card p-5 space-y-3">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">💬</span>
+            <h3 class="font-bold text-sm text-gray-800">나를 다독일 방법 <span class="text-rose-500">*</span></h3>
+          </div>
+          <span id="soothing-char-counter" class="text-xs font-bold text-gray-400">0/5자</span>
+        </div>
+
+        <div>
+          <input 
+            type="text" 
+            id="soothing-input" 
+            placeholder="공백 제외 딱 5글자 입력 (예: 토닥토닥해)"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all"
+          >
+          
+          <!-- Live Validation Feedback Box -->
+          <div id="soothing-validation-box" class="mt-2.5 p-2.5 rounded-xl text-[11px] font-medium flex items-center justify-between bg-amber-50 text-amber-700 border border-amber-100 transition-all">
+            <span id="soothing-validation-text">⚠️ 공백을 제외하고 정확히 5글자로 입력해주세요.</span>
+            <span id="soothing-status-icon" class="text-xs font-bold">5글자 필요</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Self-Love Practice Card -->
+      <div class="insta-card p-5 space-y-3">
+        <div class="flex items-center space-x-2 border-b border-gray-100 pb-3">
+          <span class="text-base">💖</span>
+          <h3 class="font-bold text-sm text-gray-800">오늘의 자기사랑 실천 <span class="text-rose-500">*</span></h3>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2" id="selflove-options">
+          <!-- Options rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-2">
+        <button 
+          id="submit-attendance-btn" 
+          disabled
+          class="insta-button w-full py-4 text-white font-bold rounded-2xl text-base shadow-lg transition-all flex items-center justify-center space-x-2"
+        >
+          <span id="submit-btn-text">🏫 등교하기</span>
+          <span id="submit-btn-spinner" class="hidden">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- STEP 3: SUCCESS BADGE / COMPLETION CARD -->
+    <section id="step-complete" class="hidden">
+      <div class="insta-card p-6 text-center space-y-5">
+        
+        <div class="relative inline-block">
+          <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner border border-emerald-100">
+            ✨
+          </div>
+          <span class="absolute bottom-0 right-0 bg-emerald-500 text-white rounded-full p-1 text-xs shadow-md">✓</span>
+        </div>
+
+        <div>
+          <span class="px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-[11px] font-bold tracking-wider uppercase">Attendance Completed</span>
+          <h2 class="text-xl font-bold text-gray-800 mt-2">오늘의 등교 완료!</h2>
+          <p class="text-xs text-gray-500 mt-1">구글 시트에 마음건강 출석이 정상 기록되었습니다.</p>
+        </div>
+
+        <!-- Instagram Story Style Receipt Card -->
+        <div class="bg-gray-50 rounded-2xl p-4 text-left border border-gray-100 space-y-2.5 text-xs">
+          <div class="flex justify-between text-gray-400 text-[11px] border-b border-gray-200/60 pb-2">
+            <span id="summary-date">2026.08.14</span>
+            <span id="summary-time">10:00 AM</span>
+          </div>
+
+          <div class="flex justify-between font-semibold text-gray-800">
+            <span class="text-gray-500">학생 정보:</span>
+            <span id="summary-student">-</span>
+          </div>
+
+          <div class="flex justify-between font-semibold text-gray-800">
+            <span class="text-gray-500">마음 온도:</span>
+            <span id="summary-temp" class="text-rose-500">-</span>
+          </div>
+
+          <div class="flex justify-between text-gray-800">
+            <span class="text-gray-500">신체 신호:</span>
+            <span id="summary-physical" class="font-medium">-</span>
+          </div>
+
+          <div class="flex justify-between text-gray-800">
+            <span class="text-gray-500">오늘의 감정:</span>
+            <span id="summary-emotion" class="font-medium">-</span>
+          </div>
+
+          <div class="flex justify-between text-gray-800">
+            <span class="text-gray-500">다독임 (5자):</span>
+            <span id="summary-soothing" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">-</span>
+          </div>
+
+          <div class="flex justify-between text-gray-800">
+            <span class="text-gray-500">자기사랑 실천:</span>
+            <span id="summary-selflove" class="font-medium text-emerald-600">-</span>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button 
+            id="restart-btn"
+            class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-xs transition-colors"
+          >
+            처음으로 돌아가기
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- GAS Settings Modal (Hidden by default) -->
+  <div id="gas-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-sm text-gray-800 flex items-center space-x-2">
+          <span>⚙️</span>
+          <span>구글 앱스 스크립트 연결</span>
+        </h3>
+        <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600 text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-gray-500 leading-relaxed">
+        배포한 구글 앱스 스크립트(GAS) Web App URL을 입력해 주세요. URL이 비어 있으면 데모 모드로 작동합니다.
+      </p>
+
+      <div>
+        <label class="block text-[11px] font-semibold text-gray-600 mb-1">Web App URL</label>
+        <input 
+          type="text" 
+          id="gas-url-input" 
+          placeholder="https://script.google.com/macros/s/.../exec"
+          class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-rose-400"
+        />
+      </div>
+
+      <div class="flex space-x-2 pt-2">
+        <button id="save-gas-url-btn" class="flex-1 py-2.5 bg-rose-500 text-white font-semibold rounded-xl text-xs hover:bg-rose-600 transition-colors">
+          저장하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // App State Store
+    const state = {
+      gasUrl: localStorage.getItem('gas_web_app_url') || 'https://script.google.com/macros/s/AKfycbyXCiDe17Q2UV2kclohCT-x0cEYQMWoITxYMzl3hUjGSV7r-h-w3P9c8n5gztjCnA0g/exec',
+      verifiedPassword: '',
+      studentId: '',
+      name: '',
+      temperature: 50,
+      physicalSignal: '',
+      emotion: '',
+      soothingMethod: '',
+      selfLove: ''
+    };
+
+    // Constants Data Options
+    const PHYSICAL_OPTIONS = [
+      { id: '두통', label: '두통', icon: '🩹' },
+      { id: '소화불량', label: '소화불량', icon: '🤢' },
+      { id: '어지러움', label: '어지러움', icon: '🌀' },
+      { id: '근육 긴장', label: '근육 긴장', icon: '⚡' },
+      { id: '가슴 두근거림', label: '가슴 두근거림', icon: '💓' },
+      { id: '특별한 증상 없음', label: '증상 없음', icon: '✨' }
+    ];
+
+    const EMOTION_OPTIONS = [
+      { id: '😊기쁨', label: '기쁨', emoji: '😊' },
+      { id: '😢슬픔', label: '슬픔', emoji: '😢' },
+      { id: '😠화남', label: '화남', emoji: '😠' },
+      { id: '😰불안', label: '불안', emoji: '😰' },
+      { id: '😴피곤', label: '피곤', emoji: '😴' },
+      { id: '😐무덤덤', label: '무덤덤', emoji: '😐' }
+    ];
+
+    const SELFLOVE_OPTIONS = [
+      { id: '충분한 수면', label: '충분한 수면', icon: '🌙' },
+      { id: '좋아하는 음악 듣기', label: '음악 듣기', icon: '🎵' },
+      { id: '산책하기', label: '산책하기', icon: '🍃' },
+      { id: '친구와 대화하기', label: '친구와 대화', icon: '💬' },
+      { id: '맛있는 음식 먹기', label: '맛있는 음식', icon: '🍰' },
+      { id: '혼자만의 시간 갖기', label: '혼자만의 시간', icon: '☕' }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDateDisplay();
+      populateStudentIds();
+      renderPhysicalOptions();
+      renderEmotionOptions();
+      renderSelfLoveOptions();
+      setupEventListeners();
+      updateValidationState();
+    });
+
+    // Display current Date in KST format
+    function initDateDisplay() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      document.getElementById('today-date-display').textContent = `${year}년 ${month}월 ${date}일 마음 체크인`;
+    }
+
+    // Populate Student IDs 21001 ~ 21033
+    function populateStudentIds() {
+      const select = document.getElementById('student-id');
+      for (let i = 21001; i <= 21033; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i;
+        select.appendChild(opt);
+      }
+    }
+
+    function renderPhysicalOptions() {
+      const container = document.getElementById('physical-options');
+      container.innerHTML = PHYSICAL_OPTIONS.map(item => `
+        <button 
+          type="button" 
+          data-type="physical" 
+          data-value="${item.id}"
+          class="option-btn p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-left text-xs font-medium text-gray-700 transition-all flex items-center space-x-2"
+        >
+          <span>${item.icon}</span>
+          <span>${item.label}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderEmotionOptions() {
+      const container = document.getElementById('emotion-options');
+      container.innerHTML = EMOTION_OPTIONS.map(item => `
+        <button 
+          type="button" 
+          data-type="emotion" 
+          data-value="${item.id}"
+          class="option-btn p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-center text-xs font-medium text-gray-700 transition-all flex flex-col items-center space-y-1"
+        >
+          <span class="text-xl">${item.emoji}</span>
+          <span>${item.label}</span>
+        </button>
+      `).join('');
+    }
+
+    function renderSelfLoveOptions() {
+      const container = document.getElementById('selflove-options');
+      container.innerHTML = SELFLOVE_OPTIONS.map(item => `
+        <button 
+          type="button" 
+          data-type="selflove" 
+          data-value="${item.id}"
+          class="option-btn p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-left text-xs font-medium text-gray-700 transition-all flex items-center space-x-2"
+        >
+          <span>${item.icon}</span>
+          <span class="truncate">${item.label}</span>
+        </button>
+      `).join('');
+    }
+
+    function setupEventListeners() {
+      // GAS URL Modal Events
+      document.getElementById('gas-settings-btn').addEventListener('click', () => {
+        document.getElementById('gas-url-input').value = state.gasUrl;
+        document.getElementById('gas-modal').classList.remove('hidden');
+      });
+      document.getElementById('close-modal-btn').addEventListener('click', () => {
+        document.getElementById('gas-modal').classList.add('hidden');
+      });
+      document.getElementById('save-gas-url-btn').addEventListener('click', () => {
+        const url = document.getElementById('gas-url-input').value.trim();
+        state.gasUrl = url;
+        localStorage.setItem('gas_web_app_url', url);
+        document.getElementById('gas-modal').classList.add('hidden');
+      });
+
+      // Auth Form Submit
+      document.getElementById('auth-form').addEventListener('submit', handleAuthSubmit);
+
+      // Student ID & Name Change
+      document.getElementById('student-id').addEventListener('change', (e) => {
+        state.studentId = e.target.value;
+        updateValidationState();
+      });
+      document.getElementById('student-name').addEventListener('input', (e) => {
+        state.name = e.target.value.trim();
+        updateValidationState();
+      });
+
+      // Temperature Slider
+      const tempSlider = document.getElementById('temp-slider');
+      tempSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        state.temperature = val;
+        updateTemperatureUI(val);
+      });
+
+      // Soothing Input Validation
+      const soothingInput = document.getElementById('soothing-input');
+      soothingInput.addEventListener('input', (e) => {
+        state.soothingMethod = e.target.value;
+        updateSoothingValidationUI();
+        updateValidationState();
+      });
+
+      // Dynamic Option Selection (Delegation)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.option-btn');
+        if (!btn) return;
+
+        const type = btn.dataset.type;
+        const val = btn.dataset.value;
+
+        if (type === 'physical') {
+          state.physicalSignal = val;
+          highlightSelectedOption('physical', val);
+        } else if (type === 'emotion') {
+          state.emotion = val;
+          highlightSelectedOption('emotion', val);
+        } else if (type === 'selflove') {
+          state.selfLove = val;
+          highlightSelectedOption('selflove', val);
+        }
+
+        updateValidationState();
+      });
+
+      // Submit Attendance Form
+      document.getElementById('submit-attendance-btn').addEventListener('click', handleSubmitAttendance);
+
+      // Restart Flow
+      document.getElementById('restart-btn').addEventListener('click', () => {
+        location.reload();
+      });
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const passInput = document.getElementById('input-password').value.trim();
+      const errorMsg = document.getElementById('auth-error-msg');
+      const btnText = document.getElementById('auth-btn-text');
+      const btnSpinner = document.getElementById('auth-btn-spinner');
+      const submitBtn = document.getElementById('auth-submit-btn');
+
+      errorMsg.classList.add('hidden');
+      submitBtn.disabled = true;
+      btnText.textContent = "암호 확인 중...";
+      btnSpinner.classList.remove('hidden');
+
+      try {
+        if (!state.gasUrl) {
+          // Demo fallback logic if no GAS URL is provided
+          await new Promise(r => setTimeout(r, 600)); // Smooth loading simulation
+          state.verifiedPassword = passInput;
+          showFormStep();
+          return;
+        }
+
+        // Real GAS Backend Call
+        const response = await fetch(state.gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'verifyPassword',
+            password: passInput
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          state.verifiedPassword = passInput;
+          showFormStep();
+        } else {
+          errorMsg.textContent = result.message || '⚠️ 암호가 일치하지 않습니다.';
+          errorMsg.classList.remove('hidden');
+        }
+
+      } catch (err) {
+        console.error('Auth Error:', err);
+        // Fallback or friendly notice
+        errorMsg.textContent = '⚠️ 서버 통신 중 오류가 발생했습니다. 구글 앱스 스크립트 URL을 확인해 주세요.';
+        errorMsg.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = "암호 확인하고 입장하기";
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    function showFormStep() {
+      document.getElementById('step-auth').classList.add('hidden');
+      document.getElementById('step-form').classList.remove('hidden');
+    }
+
+    function updateTemperatureUI(val) {
+      document.getElementById('temp-value-display').textContent = val;
+      const badge = document.getElementById('temp-badge');
+      const desc = document.getElementById('temp-description');
+
+      let color = '#F59E0B';
+      let text = '';
+
+      if (val <= 30) {
+        color = '#3B82F6'; // Cooling blue
+        text = '약간 서늘하고 가라앉은 마음 상태입니다. ❄️';
+      } else if (val <= 60) {
+        color = '#10B981'; // Warm balanced green/emerald
+        text = '온화하고 편안하며 건강한 마음 상태입니다. 🌿';
+      } else if (val <= 85) {
+        color = '#F59E0B'; // Warm energetic orange
+        text = '따뜻하고 열정이 넘치는 상태입니다. 🔥';
+      } else {
+        color = '#EF4444'; // Hot fiery red
+        text = '매우 격앙되거나 피로가 쌓인 상태일 수 있어요. ♨️';
+      }
+
+      badge.style.backgroundColor = color;
+      desc.textContent = text;
+    }
+
+    function highlightSelectedOption(type, selectedValue) {
+      const containerId = type === 'physical' ? 'physical-options' : type === 'emotion' ? 'emotion-options' : 'selflove-options';
+      const buttons = document.querySelectorAll(`#${containerId} .option-btn`);
+
+      buttons.forEach(btn => {
+        if (btn.dataset.value === selectedValue) {
+          btn.classList.remove('bg-gray-50', 'border-gray-200', 'text-gray-700');
+          btn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-600', 'font-bold', 'ring-2', 'ring-rose-200');
+        } else {
+          btn.classList.remove('bg-rose-50', 'border-rose-400', 'text-rose-600', 'font-bold', 'ring-2', 'ring-rose-200');
+          btn.classList.add('bg-gray-50', 'border-gray-200', 'text-gray-700');
+        }
+      });
+    }
+
+    function getNonSpaceCharCount(str) {
+      return str.replace(/\s+/g, '').length;
+    }
+
+    function updateSoothingValidationUI() {
+      const rawText = state.soothingMethod;
+      const count = getNonSpaceCharCount(rawText);
+
+      const counterEl = document.getElementById('soothing-char-counter');
+      const boxEl = document.getElementById('soothing-validation-box');
+      const textEl = document.getElementById('soothing-validation-text');
+      const statusIconEl = document.getElementById('soothing-status-icon');
+
+      counterEl.textContent = `공백제외 ${count}/5자`;
+
+      if (count === 5) {
+        boxEl.className = "mt-2.5 p-2.5 rounded-xl text-[11px] font-semibold flex items-center justify-between bg-emerald-50 text-emerald-700 border border-emerald-200 transition-all";
+        textEl.textContent = "✨ 딱 5글자 완성! 등교할 준비가 되었어요.";
+        statusIconEl.textContent = "✓ 통과";
+      } else if (count < 5) {
+        boxEl.className = "mt-2.5 p-2.5 rounded-xl text-[11px] font-medium flex items-center justify-between bg-amber-50 text-amber-700 border border-amber-200 transition-all";
+        textEl.textContent = `⚠️ 공백을 제외하고 정확히 5글자여야 해요. (${5 - count}글자 부족)`;
+        statusIconEl.textContent = `${count}/5자`;
+      } else {
+        boxEl.className = "mt-2.5 p-2.5 rounded-xl text-[11px] font-medium flex items-center justify-between bg-rose-50 text-rose-700 border border-rose-200 transition-all";
+        textEl.textContent = `⚠️ 공백을 제외하고 정확히 5글자여야 해요. (${count - 5}글자 초과)`;
+        statusIconEl.textContent = `${count}/5자`;
+      }
+    }
+
+    function updateValidationState() {
+      const isStudentIdValid = state.studentId !== '';
+      const isNameValid = state.name.length > 0;
+      const isPhysicalValid = state.physicalSignal !== '';
+      const isEmotionValid = state.emotion !== '';
+      const isSoothingValid = getNonSpaceCharCount(state.soothingMethod) === 5;
+      const isSelfLoveValid = state.selfLove !== '';
+
+      const isValid = isStudentIdValid && isNameValid && isPhysicalValid && isEmotionValid && isSoothingValid && isSelfLoveValid;
+
+      const submitBtn = document.getElementById('submit-attendance-btn');
+      submitBtn.disabled = !isValid;
+    }
+
+    async function handleSubmitAttendance() {
+      const submitBtn = document.getElementById('submit-attendance-btn');
+      const btnText = document.getElementById('submit-btn-text');
+      const btnSpinner = document.getElementById('submit-btn-spinner');
+
+      submitBtn.disabled = true;
+      btnText.textContent = "등교 제출 중...";
+      btnSpinner.classList.remove('hidden');
+
+      const payload = {
+        action: 'submitAttendance',
+        password: state.verifiedPassword,
+        studentId: state.studentId,
+        name: state.name,
+        temperature: state.temperature,
+        physicalSignal: state.physicalSignal,
+        emotion: state.emotion,
+        soothingMethod: state.soothingMethod.trim(),
+        selfLove: state.selfLove
+      };
+
+      try {
+        if (!state.gasUrl) {
+          // Simulation mode when no GAS URL is set
+          await new Promise(r => setTimeout(r, 800));
+          showCompletionStep();
+          return;
+        }
+
+        const response = await fetch(state.gasUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showCompletionStep();
+        } else {
+          alert(result.message || '제출 처리 중 오류가 발생했습니다.');
+        }
+
+      } catch (err) {
+        console.error('Submission Error:', err);
+        alert('서버로 전송하지 못했습니다. 연결 상태를 확인해주세요.');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = "🏫 등교하기";
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    function showCompletionStep() {
+      document.getElementById('step-form').classList.add('hidden');
+      document.getElementById('step-complete').classList.remove('hidden');
+
+      const now = new Date();
+      document.getElementById('summary-date').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+      document.getElementById('summary-time').textContent = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
+      document.getElementById('summary-student').textContent = `${state.studentId} ${state.name}`;
+      document.getElementById('summary-temp').textContent = `${state.temperature}°C`;
+      document.getElementById('summary-physical').textContent = state.physicalSignal;
+      document.getElementById('summary-emotion').textContent = state.emotion;
+      document.getElementById('summary-soothing').textContent = state.soothingMethod;
+      document.getElementById('summary-selflove').textContent = state.selfLove;
+    }
+  </script>
+</body>
+</html>
